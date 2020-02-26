@@ -2,16 +2,22 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { getMemberInfo } from './apiRequests'
+const queryString = require('query-string');
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { member: "" };
+
   }
 
   componentDidMount() {
-    getMemberInfo("666666")
-      .then(response => response.json())
+    const searchParams = queryString.parse(this.props.location.search);
+    const memberId = searchParams.id
+    if (memberId === undefined) {
+      return
+    }
+    getMemberInfo(memberId)
       .then(data => {
         this.setState({ member: data })
       });
